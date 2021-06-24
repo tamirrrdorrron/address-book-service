@@ -1,13 +1,25 @@
 package au.com.reece.addressbook.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import au.com.reece.addressbook.model.AddressBook;
+import au.com.reece.addressbook.service.AddressBookService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-@RestController
+import java.util.List;
+
+@Controller
 public class AddressBookController {
 
-    @GetMapping("/hello")
-    public String getHello() {
-        return "hello world 1234 5 ";
+    @Autowired
+    private AddressBookService addressBookService;
+
+    @RequestMapping(value = "/addressBooks", method = RequestMethod.GET)
+    public ResponseEntity listAddressBooks() {
+        List<AddressBook> addressBooks = addressBookService.getAddressBooks();
+        return new ResponseEntity(addressBooks, HttpStatus.OK);
     }
 }

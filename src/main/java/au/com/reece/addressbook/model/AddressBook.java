@@ -1,15 +1,23 @@
 package au.com.reece.addressbook.model;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-@Builder
+@Entity
+@Table
 @Getter
+@Setter
 public class AddressBook {
 
+    @Column
+    @Id
     int id;
+
+    @Column
     String name;
-    List<Contact> contacts;
 }

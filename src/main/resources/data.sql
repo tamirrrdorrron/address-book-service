@@ -1,13 +1,12 @@
-DROP TABLE IF EXISTS billionaires;
+DROP TABLE IF EXISTS Address_Book;
 
-CREATE TABLE billionaires (
+CREATE TABLE Address_Book (
   id INT AUTO_INCREMENT  PRIMARY KEY,
-  first_name VARCHAR(250) NOT NULL,
-  last_name VARCHAR(250) NOT NULL,
-  career VARCHAR(250) DEFAULT NULL
+  name VARCHAR(250) NOT NULL
 );
 
-INSERT INTO billionaires (first_name, last_name, career) VALUES
-  ('Aliko', 'Dangote', 'Billionaire Industrialist'),
-  ('Bill', 'Gates', 'Billionaire Tech Entrepreneur'),
-  ('Folrunsho', 'Alakija', 'Billionaire Oil Magnate');
+INSERT INTO Address_Book (id, name) VALUES (1, 'first address book');
+
+INSERT INTO Address_Book (id, name) VALUES (2, 'second address book');
+
+INSERT INTO Address_Book (id, name) VALUES (3, 'third address book');
