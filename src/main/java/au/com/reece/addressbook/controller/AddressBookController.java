@@ -17,7 +17,7 @@ public class AddressBookController {
     @Autowired
     private AddressBookService addressBookService;
 
-    @RequestMapping(value = "/addressBooks", method = RequestMethod.GET)
+    @RequestMapping(value = "/address-books", method = RequestMethod.GET)
     public ResponseEntity listAddressBooks() {
         List<AddressBook> addressBooks = addressBookService.getAddressBooks();
         return new ResponseEntity(addressBooks, HttpStatus.OK);
