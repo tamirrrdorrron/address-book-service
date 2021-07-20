@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS Address_Book;
+DROP TABLE IF EXISTS address_book;
 
-CREATE TABLE Address_Book (
+CREATE TABLE address_book (
   id INT AUTO_INCREMENT  PRIMARY KEY,
   name VARCHAR(250) NOT NULL
 );
