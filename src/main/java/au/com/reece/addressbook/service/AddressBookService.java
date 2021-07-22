@@ -19,7 +19,7 @@ public class AddressBookService {
 
     public String saveAddressBook(String name) {
         AddressBook addressBook = new AddressBook();
-        addressBook.setName(name);
+        addressBook.setAddress_book_name(name);
         addressBooksRepository.save(addressBook);
         return "Saved";
     }

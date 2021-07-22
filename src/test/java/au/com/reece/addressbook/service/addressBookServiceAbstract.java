@@ -1,8 +1,8 @@
 package au.com.reece.addressbook.service;
 
 import au.com.reece.addressbook.repository.AddressBooksRepository;
+import au.com.reece.addressbook.repository.ContactsRepository;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class addressBookServiceAbstract {
@@ -11,6 +11,8 @@ public class addressBookServiceAbstract {
     AddressBookService addressBookService;
     @Autowired
     AddressBooksRepository addressBooksRepository;
+    @Autowired
+    ContactsRepository contactsRepository;
 
     void createAddressBooksInDb() {
         addressBookService.saveAddressBook("first book");
