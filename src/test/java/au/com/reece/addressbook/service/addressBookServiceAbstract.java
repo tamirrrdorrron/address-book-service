@@ -15,9 +15,9 @@ public class addressBookServiceAbstract {
     ContactsRepository contactsRepository;
 
     void createAddressBooksInDb() {
-        addressBookService.saveAddressBook("first book");
-        addressBookService.saveAddressBook("second book");
-        addressBookService.saveAddressBook("third book");
+        addressBookService.createAddressBook("first book");
+        addressBookService.createAddressBook("second book");
+        addressBookService.createAddressBook("third book");
     }
 
     @AfterEach

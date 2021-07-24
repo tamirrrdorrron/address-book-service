@@ -1,7 +1,6 @@
 package au.com.reece.addressbook.controller;
 
 import au.com.reece.addressbook.model.AddressBook;
-import au.com.reece.addressbook.repository.AddressBooksRepository;
 import au.com.reece.addressbook.service.AddressBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +19,8 @@ public class AddressBookController {
 
     @PostMapping(path="/address-book/add")
     public @ResponseBody String addAddressBooks (@RequestParam String name) {
-        return addressBookService.saveAddressBook(name);
+        return addressBookService.createAddressBook(name);
     }
-
 
     @GetMapping(path="/address-book/all")
     public @ResponseBody

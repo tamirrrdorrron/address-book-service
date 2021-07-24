@@ -14,13 +14,13 @@ public class AddressBook {
 
     @Column
     @Id
-//    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    int address_book_id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    int id;
 
     @Column
-    String address_book_name;
+    String name;
 
-    @OneToMany(mappedBy="addressBook", fetch = FetchType.EAGER,
+    @OneToMany(mappedBy="addressBook", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
     private Set<Contact> contacts;
 }

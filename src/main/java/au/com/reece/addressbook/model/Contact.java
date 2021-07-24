@@ -11,18 +11,17 @@ import javax.persistence.*;
 @Getter
 public class Contact {
 
-    @Column
     @Id
-//    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    int contact_id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    int id;
 
     @Column
-    String contact_full_name;
+    String fullName;
 
     @Column
-    String contact_mobile_phone;
+    String mobilePhone;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="contact_address_book_id", nullable=false)
+    @JoinColumn(name="address_book_id", nullable=false)
     private AddressBook addressBook;
 }

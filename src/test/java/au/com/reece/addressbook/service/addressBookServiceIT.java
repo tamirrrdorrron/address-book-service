@@ -1,7 +1,6 @@
 package au.com.reece.addressbook.service;
 
 import au.com.reece.addressbook.model.AddressBook;
-import au.com.reece.addressbook.model.Contact;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,42 +20,49 @@ public class addressBookServiceIT extends addressBookServiceAbstract {
     }
 
     @Test
-    void shouldBeAbleToSaveAddressBook() {
-        addressBookService.saveAddressBook("address book 1");
+    void shouldBeAbleToCreateAddressBook() {
+        addressBookService.createAddressBook("address book 1");
         List<AddressBook> addressBooks = addressBookService.getAllAddressBooks();
-        assertEquals("address book 1", addressBooks.get(0).getAddress_book_name());
+        assertEquals("address book 1", addressBooks.get(0).getName());
     }
 
     @Test
-    void shouldNotBeAbleToSaveMultipleAddressBooksWithSameName() {}
+    void shouldReturnEmptyListIfNoAddressBooksInDb() {
+        List<AddressBook> addressBooks = addressBookService.getAllAddressBooks();
+        assertEquals(0, addressBooks.size());
+    }
 
     @Test
-    void shouldBeAbleToAddAContactToAnAddressBook() {
-        // create a new book
-        AddressBook ab = new AddressBook();
-        ab.setAddress_book_id(1);
-        ab.setAddress_book_name("tamirrr");
-
-        // save the book
-        addressBooksRepository.save(ab);
-
-        // create and save new pages
-        Contact contact = new Contact();
-        contact.setContact_id(1);
-        contact.setContact_mobile_phone("123445");
-        contact.setContact_full_name("hannah");
-        contact.setAddressBook(ab);
-        contactsRepository.save(contact);
-
-        // create and save new pages
-        contact = new Contact();
-        contact.setContact_id(2);
-        contact.setContact_mobile_phone("gg45");
-        contact.setContact_full_name("hannadfdfh");
-        contact.setAddressBook(ab);
-        contactsRepository.save(contact);
-
-        System.out.println("debug here");
+    void shouldNotBeAbleToSaveMultipleAddressBooksWithSameName() {
+        addressBookService.createAddressBook("address book 1");
+        addressBookService.createAddressBook("address book 1");
+        addressBookService.createAddressBook("address book 1");
+        assertEquals(1, addressBookService.getAllAddressBooks().size());
     }
+
+//    @Test
+//    void shouldBeAbleToAddAContactToAnAddressBook() {
+//        // create a new book
+//        addressBookService.createAddressBook("test book");
+//        AddressBook addressBook = addressBookService.getAllAddressBooks().get(0);
+//
+//        // create and save new pages
+//        Contact contact = new Contact();
+//        contact.setId(1);
+//        contact.setMobilePhone("123445");
+//        contact.setFullName("hannah");
+//        contact.setAddressBook(addressBook);
+//        addressBookService.createContact(contact);
+//
+//        // create and save new pages
+//        contact = new Contact();
+//        contact.setId(2);
+//        contact.setMobilePhone("gg45");
+//        contact.setFullName("hannadfdfh");
+//        contact.setAddressBook(addressBook);
+//        addressBookService.createContact(contact);
+//
+//        System.out.println("debug here");
+//    }
 
 }

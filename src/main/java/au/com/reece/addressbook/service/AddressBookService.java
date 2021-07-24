@@ -17,14 +17,22 @@ public class AddressBookService {
         this.addressBooksRepository = addressBooksRepository;
     }
 
-    public String saveAddressBook(String name) {
-        AddressBook addressBook = new AddressBook();
-        addressBook.setAddress_book_name(name);
-        addressBooksRepository.save(addressBook);
-        return "Saved";
+    public String createAddressBook(String name) {
+        if (checkIfExists(name)) {
+            return "duplicate found";
+        } else {
+            AddressBook addressBook = new AddressBook();
+            addressBook.setName(name);
+            addressBooksRepository.save(addressBook);
+            return "saved";
+        }
     }
 
     public List<AddressBook> getAllAddressBooks() {
         return (List<AddressBook>) addressBooksRepository.findAll();
+    }
+
+    private boolean checkIfExists(String name) {
+        return addressBooksRepository.findByName(name).size() > 0;
     }
 }
