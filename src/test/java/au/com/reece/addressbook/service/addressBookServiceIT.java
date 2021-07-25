@@ -34,35 +34,22 @@ public class addressBookServiceIT extends addressBookServiceAbstract {
 
     @Test
     void shouldNotBeAbleToSaveMultipleAddressBooksWithSameName() {
-        addressBookService.createAddressBook("address book 1");
-        addressBookService.createAddressBook("address book 1");
-        addressBookService.createAddressBook("address book 1");
+        addressBookService.createAddressBook("address book 2");
+        addressBookService.createAddressBook("address book 2");
+        addressBookService.createAddressBook("address book 2");
         assertEquals(1, addressBookService.getAllAddressBooks().size());
     }
 
-//    @Test
-//    void shouldBeAbleToAddAContactToAnAddressBook() {
-//        // create a new book
-//        addressBookService.createAddressBook("test book");
-//        AddressBook addressBook = addressBookService.getAllAddressBooks().get(0);
-//
-//        // create and save new pages
-//        Contact contact = new Contact();
-//        contact.setId(1);
-//        contact.setMobilePhone("123445");
-//        contact.setFullName("hannah");
-//        contact.setAddressBook(addressBook);
-//        addressBookService.createContact(contact);
-//
-//        // create and save new pages
-//        contact = new Contact();
-//        contact.setId(2);
-//        contact.setMobilePhone("gg45");
-//        contact.setFullName("hannadfdfh");
-//        contact.setAddressBook(addressBook);
-//        addressBookService.createContact(contact);
-//
-//        System.out.println("debug here");
-//    }
+    @Test
+    void shouldGetAddressBookById() {
+        addressBookService.createAddressBook("address book 3");
+        List<AddressBook> addressBooks = addressBookService.getAllAddressBooks();
+        int id = getFirstIdFromListOfAddressBooks(addressBooks);
+        assertEquals("address book 3", addressBookService.getAddressBook(id).getName());
+    }
+
+    private int getFirstIdFromListOfAddressBooks(List<AddressBook> addressBooks) {
+        return addressBooks.iterator().next().getId();
+    }
 
 }

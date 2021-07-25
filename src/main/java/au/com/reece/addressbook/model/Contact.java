@@ -1,5 +1,6 @@
 package au.com.reece.addressbook.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,6 +10,7 @@ import javax.persistence.*;
 @Table
 @Setter
 @Getter
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "addressBook"})
 public class Contact {
 
     @Id
@@ -23,5 +25,5 @@ public class Contact {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name="address_book_id", nullable=false)
-    private AddressBook addressBook;
+    AddressBook addressBook;
 }

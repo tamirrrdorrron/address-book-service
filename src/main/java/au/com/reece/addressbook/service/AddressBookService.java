@@ -13,23 +13,28 @@ public class AddressBookService {
     private final AddressBooksRepository addressBooksRepository;
 
     @Autowired
-    public AddressBookService (AddressBooksRepository addressBooksRepository) {
+    public AddressBookService(AddressBooksRepository addressBooksRepository) {
         this.addressBooksRepository = addressBooksRepository;
     }
 
-    public String createAddressBook(String name) {
-        if (checkIfExists(name)) {
-            return "duplicate found";
-        } else {
-            AddressBook addressBook = new AddressBook();
-            addressBook.setName(name);
-            addressBooksRepository.save(addressBook);
-            return "saved";
-        }
+    public AddressBook getAddressBook(int addressBookId) {
+        if (addressBooksRepository.findById(addressBookId).isPresent()) {
+            return addressBooksRepository.findById(addressBookId).get();
+        } else return null;
     }
 
     public List<AddressBook> getAllAddressBooks() {
         return (List<AddressBook>) addressBooksRepository.findAll();
+    }
+
+    public AddressBook createAddressBook(String name) {
+        if (checkIfExists(name)) {
+            return null;
+        } else {
+            AddressBook addressBook = new AddressBook();
+            addressBook.setName(name);
+            return addressBooksRepository.save(addressBook);
+        }
     }
 
     private boolean checkIfExists(String name) {
