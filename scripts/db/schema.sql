@@ -1,6 +1,7 @@
 CREATE TABLE address_book (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(200) NOT NULL,
+  branch_number VARCHAR(10) NOT NULL,
   PRIMARY KEY(id)
 );
 

@@ -8,5 +8,5 @@ import java.util.List;
 // CRUD refers Create, Read, Update, Delete
 
 public interface AddressBooksRepository extends CrudRepository<AddressBook, Integer> {
-    List<AddressBook> findByName(String name);
+    List<AddressBook> findByNameAndBranchNumber(String name, String branchNumber);
 }

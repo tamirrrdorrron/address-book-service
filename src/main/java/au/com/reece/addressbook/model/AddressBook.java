@@ -1,17 +1,18 @@
 package au.com.reece.addressbook.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table
-@Getter
-@Setter
+@Data
 public class AddressBook {
+
+    public AddressBook() {
+    }
 
     @Column
     @Id
@@ -20,6 +21,9 @@ public class AddressBook {
 
     @Column
     String name;
+
+    @Column
+    String branchNumber;
 
     @OneToMany(mappedBy="addressBook", fetch = FetchType.LAZY,
             cascade = CascadeType.ALL)
