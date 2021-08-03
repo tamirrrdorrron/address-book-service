@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.1'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'au.com.reece'
@@ -22,8 +23,47 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'junit:junit:4.13.2'
+	testImplementation 'org.junit.jupiter:junit-jupiter-params:5.7.0'
 }
 
 test {
 	useJUnitPlatform()
+}
+
+jacoco {
+	toolVersion = "0.8.+"
+}
+
+jacocoTestReport {
+
+	reports {
+		xml.enabled true
+	}
+
+	jacocoTestCoverageVerification {
+
+		afterEvaluate {
+			classDirectories.from = files(classDirectories.files.collect {
+				fileTree(dir: it, exclude: [
+						'au/com/reece/addressbook/AddressBookApplication.class',
+						'au/com/reece/addressbook/model/**',
+				])
+			})
+		}
+
+		violationRules {
+			rule {
+				limit {
+					counter = 'INSTRUCTION'
+					value = 'COVEREDRATIO'
+					minimum = 0.9
+				}
+				limit {
+					counter = 'BRANCH'
+					value = 'COVEREDRATIO'
+					minimum = 0.9
+				}
+			}
+		}
+	}
 }

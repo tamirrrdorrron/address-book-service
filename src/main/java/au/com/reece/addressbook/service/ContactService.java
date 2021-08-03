@@ -12,14 +12,17 @@ public class ContactService {
 
     private final AddressBookService addressBookService;
     private final ContactsRepository contactsRepository;
+    private final ContactValidator contactValidator;
 
     @Autowired
-    public ContactService(AddressBookService addressBookService, ContactsRepository contactsRepository) {
+    public ContactService(AddressBookService addressBookService, ContactsRepository contactsRepository, ContactValidator contactValidator) {
         this.addressBookService = addressBookService;
         this.contactsRepository = contactsRepository;
+        this.contactValidator = contactValidator;
     }
 
     public Contact addContactToAddressBook(ContactRequestBody contactRequestBody) {
+        contactValidator.validateRequestBody(contactRequestBody);
         return contactsRepository.save(convertRequestBodyToContact(contactRequestBody));
     }
 

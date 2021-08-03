@@ -1,6 +1,5 @@
 package au.com.reece.addressbook.model;
 
-import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,7 +24,7 @@ public class AddressBook {
     @Column
     String branchNumber;
 
-    @OneToMany(mappedBy="addressBook", fetch = FetchType.LAZY,
+    @OneToMany(mappedBy="addressBook", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     private Set<Contact> contacts;
 }

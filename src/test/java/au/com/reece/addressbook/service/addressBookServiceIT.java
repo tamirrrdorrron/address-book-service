@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 @SpringBootTest
@@ -14,14 +15,16 @@ public class addressBookServiceIT extends addressBookServiceAbstract {
 
     @Test
     void shouldGetAllAddressBooks() {
-        createAddressBooksInDb();
+        for (int i = 0; i < 3; i++) {
+            createAddressBook("book" + i, "2009");
+        }
         List<AddressBook> addressBooks = addressBookService.getAllAddressBooks();
         assertEquals(3, addressBooks.size());
     }
 
     @Test
     void shouldBeAbleToCreateAddressBook() {
-        addressBookService.createAddressBook("address book 1");
+        addressBookService.createAddressBook(createRequestBody("address book 1", "2001"));
         List<AddressBook> addressBooks = addressBookService.getAllAddressBooks();
         assertEquals("address book 1", addressBooks.get(0).getName());
     }
@@ -34,15 +37,22 @@ public class addressBookServiceIT extends addressBookServiceAbstract {
 
     @Test
     void shouldNotBeAbleToSaveMultipleAddressBooksWithSameName() {
-        addressBookService.createAddressBook("address book 2");
-        addressBookService.createAddressBook("address book 2");
-        addressBookService.createAddressBook("address book 2");
-        assertEquals(1, addressBookService.getAllAddressBooks().size());
+        addressBookService.createAddressBook(createRequestBody("address book 2", "2001"));
+        assertThrows(IllegalStateException.class, () -> {
+            addressBookService.createAddressBook(createRequestBody("address book 2", "2001"));
+        });
+    }
+
+    @Test
+    void shouldNotBeAbleToSaveAddressBookWithInvalidBranchNumber() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            addressBookService.createAddressBook(createRequestBody("address book 2", "abcd"));
+        });
     }
 
     @Test
     void shouldGetAddressBookById() {
-        addressBookService.createAddressBook("address book 3");
+        addressBookService.createAddressBook(createRequestBody("address book 3", "2001"));
         List<AddressBook> addressBooks = addressBookService.getAllAddressBooks();
         int id = getFirstIdFromListOfAddressBooks(addressBooks);
         assertEquals("address book 3", addressBookService.getAddressBook(id).getName());
