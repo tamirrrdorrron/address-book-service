@@ -1,6 +1,6 @@
-package au.com.reece.addressbook.service;
+package au.com.reece.addressbook.service.validation;
 
-import au.com.reece.addressbook.model.AddressBookRequestBody;
+import au.com.reece.addressbook.dto.AddressBookRequestBody;
 import au.com.reece.addressbook.repository.AddressBooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,7 +12,7 @@ public class AddressBookValidator {
     @Autowired
     AddressBooksRepository addressBooksRepository;
 
-    public void validateRequestBody(AddressBookRequestBody addressBookRequestBody) throws IllegalArgumentException {
+    public void validateRequestBody(AddressBookRequestBody addressBookRequestBody) {
         BranchValidator.validateBranchNumber(addressBookRequestBody.getBranchNumber());
     }
 

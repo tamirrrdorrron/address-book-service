@@ -2,7 +2,7 @@ package au.com.reece.addressbook.service;
 
 import au.com.reece.addressbook.model.AddressBook;
 import au.com.reece.addressbook.model.Contact;
-import au.com.reece.addressbook.model.ContactRequestBody;
+import au.com.reece.addressbook.dto.ContactRequestBody;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,9 +24,8 @@ public class ContactServiceIT extends addressBookServiceAbstract {
         ContactRequestBody contactRequestBody = new ContactRequestBody();
         contactRequestBody.setFullName("Tamir Doron");
         contactRequestBody.setMobilePhone("0488661490");
-        contactRequestBody.setAddressBookId(addressBook.getId());
 
-        contactService.addContactToAddressBook(contactRequestBody);
+        contactService.addContactToAddressBook(addressBook.getId(), contactRequestBody);
         addressBook = addressBookService.getAllAddressBooks().get(0);
         Contact contact = addressBook.getContacts().iterator().next();
 
@@ -44,17 +43,26 @@ public class ContactServiceIT extends addressBookServiceAbstract {
         ContactRequestBody contactRequestBody = new ContactRequestBody();
         contactRequestBody.setFullName("Tamir Doron");
         contactRequestBody.setMobilePhone("(02) 95008791");
-        contactRequestBody.setAddressBookId(addressBook.getId());
 
         assertThrows(IllegalArgumentException.class, () -> {
-            contactService.addContactToAddressBook(contactRequestBody);
+            contactService.addContactToAddressBook(addressBook.getId(), contactRequestBody);
         });
     }
 
     @Test
-    void shouldNotAllowDuplicateNameInSameAddressBook() {}
+    void shouldNotAllowDuplicateContactInSameAddressBook() {
+    }
 
     @Test
-    void shouldNotAllowDuplicateMobileNumberInSameAddressBook() {}
+    void shouldComplainIfTryingToDeleteValidContactButNotFromAddressBook() {}
+
+    @Test
+    void shouldGetContact() {}
+
+    @Test
+    void shouldDeleteContact() {}
+
+    @Test
+    void shouldConvertRequestBodyToContact() {}
 
 }

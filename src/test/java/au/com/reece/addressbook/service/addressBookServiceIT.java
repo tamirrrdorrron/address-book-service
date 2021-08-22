@@ -3,6 +3,7 @@ package au.com.reece.addressbook.service;
 import au.com.reece.addressbook.model.AddressBook;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -58,8 +59,24 @@ public class addressBookServiceIT extends addressBookServiceAbstract {
         assertEquals("address book 3", addressBookService.getAddressBook(id).getName());
     }
 
-    private int getFirstIdFromListOfAddressBooks(List<AddressBook> addressBooks) {
-        return addressBooks.iterator().next().getId();
+
+    @Test
+    void shouldDeleteAddressBook() {
+        int addressBookId = createAddressBook("address book to be deleted", "2001").getId();
+        assertEquals(1, addressBookService.getAllAddressBooks().size());
+        addressBookService.deleteAddressBook(addressBookId);
+        assertEquals(0, addressBookService.getAllAddressBooks().size());
     }
+
+    @Test
+    void shouldCheckIfAddressBookExistsBeforeAttemptingDelete() {
+        assertEquals(0, addressBookService.getAllAddressBooks().size());
+        assertThrows(ResourceNotFoundException.class, () -> {
+            addressBookService.deleteAddressBook(1);
+        });
+    }
+
+    @Test
+    void shouldDeleteContactsWhenDeletingAddressBook() {}
 
 }

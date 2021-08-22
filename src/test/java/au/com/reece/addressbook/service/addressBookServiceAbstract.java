@@ -1,10 +1,13 @@
 package au.com.reece.addressbook.service;
 
-import au.com.reece.addressbook.model.AddressBookRequestBody;
+import au.com.reece.addressbook.dto.AddressBookRequestBody;
+import au.com.reece.addressbook.model.AddressBook;
 import au.com.reece.addressbook.repository.AddressBooksRepository;
 import au.com.reece.addressbook.repository.ContactsRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 
 public class addressBookServiceAbstract {
@@ -16,9 +19,6 @@ public class addressBookServiceAbstract {
     @Autowired
     ContactsRepository contactsRepository;
 
-    void createAddressBook(String name, String branchNumber) {
-        addressBookService.createAddressBook(createRequestBody(name, branchNumber));
-    }
 
     @AfterEach
     void deleteAllAddressBooks() {
@@ -26,11 +26,18 @@ public class addressBookServiceAbstract {
     }
 
     public AddressBookRequestBody createRequestBody(String name, String branchNumber) {
-        AddressBookRequestBody addressBookRequestBody = new AddressBookRequestBody();
-        addressBookRequestBody.setName(name);
-        addressBookRequestBody.setBranchNumber(branchNumber);
-        return addressBookRequestBody;
+        return AddressBookRequestBody.builder()
+                .name(name)
+                .branchNumber(branchNumber)
+                .build();
+    }
 
+    protected AddressBook createAddressBook(String name, String branchNumber) {
+        return addressBookService.createAddressBook(createRequestBody(name, branchNumber));
+    }
+
+    protected int getFirstIdFromListOfAddressBooks(List<AddressBook> addressBooks) {
+        return addressBooks.iterator().next().getId();
     }
 
 }

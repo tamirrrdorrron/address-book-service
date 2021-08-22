@@ -1,5 +1,7 @@
 package au.com.reece.addressbook.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -9,6 +11,12 @@ import java.util.Set;
 @Table
 @Data
 public class AddressBook {
+
+    @Builder
+    public AddressBook(String name, String branchNumber) {
+        this.name = name;
+        this.branchNumber = branchNumber;
+    }
 
     public AddressBook() {
     }
@@ -26,5 +34,6 @@ public class AddressBook {
 
     @OneToMany(mappedBy="addressBook", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Contact> contacts;
 }

@@ -1,4 +1,4 @@
-package au.com.reece.addressbook.model;
+package au.com.reece.addressbook.dto;
 
 import lombok.Data;
 
@@ -7,5 +7,5 @@ public class ContactRequestBody {
 
     private String fullName;
     private String mobilePhone;
-    private int addressBookId;
+
 }

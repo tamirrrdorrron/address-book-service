@@ -1,6 +1,6 @@
-package au.com.reece.addressbook.service;
+package au.com.reece.addressbook.service.validation;
 
-import au.com.reece.addressbook.model.ContactRequestBody;
+import au.com.reece.addressbook.dto.ContactRequestBody;
 import org.springframework.stereotype.Component;
 
 @Component

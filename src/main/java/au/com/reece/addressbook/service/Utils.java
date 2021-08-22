@@ -1,9 +1,9 @@
 package au.com.reece.addressbook.service;
 
 import au.com.reece.addressbook.model.AddressBook;
-import au.com.reece.addressbook.model.AddressBookRequestBody;
+import au.com.reece.addressbook.dto.AddressBookRequestBody;
 import au.com.reece.addressbook.model.Contact;
-import au.com.reece.addressbook.model.ContactRequestBody;
+import au.com.reece.addressbook.dto.ContactRequestBody;
 
 public class Utils {
 
@@ -19,10 +19,9 @@ public class Utils {
     }
 
     public static AddressBook makeAddressBookFromRequestBody(AddressBookRequestBody addressBookRequestBody) {
-        AddressBook addressBook = new AddressBook();
-        addressBook.setName(addressBookRequestBody.getName());
-        addressBook.setBranchNumber(addressBookRequestBody.getBranchNumber());
-        return addressBook;
+        return AddressBook.builder()
+                .name(addressBookRequestBody.getName())
+                .branchNumber(addressBookRequestBody.getBranchNumber())
+                .build();
     }
-
 }

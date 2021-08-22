@@ -1,4 +1,4 @@
-package au.com.reece.addressbook.service;
+package au.com.reece.addressbook.service.validation;
 
 public class MobilePhoneValidator {
 
