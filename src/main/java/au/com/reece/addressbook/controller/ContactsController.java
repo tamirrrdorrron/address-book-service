@@ -7,13 +7,13 @@ import au.com.reece.addressbook.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 
-@Controller
+@RestController
 @Validated
 @RequestMapping("/address-book")
 public class ContactsController {
@@ -26,7 +26,7 @@ public class ContactsController {
     Contact addContactToAddressBook (
             @Pattern(regexp = "^[0-9]\\d*$", message = "address book id must be a integer >= 0")
             @PathVariable("addressBookId") String addressBookId,
-            @RequestBody ContactRequestBody contactRequestBody
+            @Valid @RequestBody ContactRequestBody contactRequestBody
     ) {
         return contactService.addContactToAddressBook(Integer.parseInt(addressBookId), contactRequestBody);
     }

@@ -35,10 +35,11 @@ public class ContactService {
 
     public Contact addContactToAddressBook(int addressBookId, ContactRequestBody contactRequestBody) {
         contactValidator.validateRequestBody(contactRequestBody);
+        contactValidator.checkIfExists(contactRequestBody.getMobilePhone(), addressBookId);
         return contactsRepository.save(convertRequestBodyToContact(addressBookId, contactRequestBody));
     }
 
-    private Contact getContact(int contactId) {
+    protected Contact getContact(int contactId) {
         Optional<Contact> contact = contactsRepository.findById(contactId);
         if (contact.isPresent()) {
             return contact.get();

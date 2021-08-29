@@ -23,7 +23,7 @@ public class Contact {
     @Column
     String mobilePhone;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name="address_book_id", nullable=false)
     AddressBook addressBook;
 }

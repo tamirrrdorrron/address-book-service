@@ -23,3 +23,9 @@ run the dockerized application as per normal:
 ```bash
 docker run address-book-api
 ``` 
+
+## API Documentation
+
+Swagger is available on:
+
+/address-book-service/swagger-ui.html

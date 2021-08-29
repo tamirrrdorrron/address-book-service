@@ -22,9 +22,8 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,15 +36,15 @@ public class addressBookControllerTest {
     @MockBean
     private AddressBookService addressBookServiceMock;
 
-    private List<AddressBook> listOfAddressBooks() {
-        return List.of(dummyAddressBook());
-    }
-
     private AddressBook dummyAddressBook() {
         return AddressBook.builder()
                 .name("unit test")
                 .branchNumber("2003")
                 .build();
+    }
+
+    private List<AddressBook> listOfAddressBooks() {
+        return List.of(dummyAddressBook());
     }
 
     @Test
@@ -154,12 +153,38 @@ public class addressBookControllerTest {
     }
 
     @Test
-    void shouldReturnOkIfAddressBookDeletedSuccessfully() {}
+    void shouldReturnOkIfAddressBookDeletedSuccessfully() throws Exception {
+        doNothing().when(addressBookServiceMock).deleteAddressBook(anyInt());
+        MvcResult result = mockMvc.perform(delete("/address-book/0"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+        assertEquals(
+                "{\n\"message\": \"address book with id '0' deleted successfully\"\n}",
+                result.getResponse().getContentAsString());
+    }
 
     @Test
-    void shouldProvideFeedbackIfAddressBookForDeleteNotFound() {}
+    void shouldProvideFeedbackIfAddressBookForDeleteNotFound() throws Exception {
+        doThrow(new ResourceNotFoundException("no address book found for id 1")).when(addressBookServiceMock).deleteAddressBook(anyInt());
+        MvcResult result = mockMvc.perform(delete("/address-book/1"))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andReturn();
+        assertEquals(
+                "{\"httpStatus\":404,\"error\":\"NOT_FOUND\",\"message\":\"no address book found for id 1\"}",
+                result.getResponse().getContentAsString());
+    }
 
     @ParameterizedTest
     @ValueSource(strings = {"-1", "a", "1a", "a1"})
-    void shouldProvideFeedbackIfAddressBookIdIsNotValid() {}
+    void shouldProvideFeedbackIfAddressBookIdIsNotValid(String addressBookId) throws Exception {
+        MvcResult result = mockMvc.perform(delete("/address-book/" + addressBookId))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andReturn();
+        assertEquals(
+                "{\"httpStatus\":400,\"error\":\"INVALID_REQUEST_TYPE\",\"message\":\"value '" + addressBookId + "' is invalid. address book id must be a integer >= 0\"}",
+                result.getResponse().getContentAsString());
+    }
 }
