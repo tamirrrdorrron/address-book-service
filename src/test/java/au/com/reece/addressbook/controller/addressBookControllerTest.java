@@ -50,7 +50,7 @@ public class addressBookControllerTest {
     @Test
     void shouldReturnAllAddressBooksAsListOfJsonStrings() throws Exception {
         when(addressBookServiceMock.getAllAddressBooks()).thenReturn(listOfAddressBooks());
-        MvcResult result = mockMvc.perform(get("/address-book/"))
+        MvcResult result = mockMvc.perform(get("/address-books/"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -75,7 +75,7 @@ public class addressBookControllerTest {
     void shouldValidateAddressBookRequestBody(String addressBookName, String branchNumber) throws Exception {
         // validate address book name, branch number
         // not null, empty, field length
-        mockMvc.perform(post("/address-book/add")
+        mockMvc.perform(post("/address-books/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "    \"name\": " + addressBookName + ",\n" +
@@ -87,7 +87,7 @@ public class addressBookControllerTest {
     @Test
     void shouldReturnCreatedAddressBookAsJsonString() throws Exception {
         when(addressBookServiceMock.createAddressBook(any())).thenReturn(dummyAddressBook());
-        MvcResult result = mockMvc.perform(post("/address-book/add")
+        MvcResult result = mockMvc.perform(post("/address-books/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                          "    \"name\": \"unit test\",\n" +
@@ -103,7 +103,7 @@ public class addressBookControllerTest {
     @Test
     void shouldProvideFeedbackIfAddressBookAlreadyExistsOnCreate() throws Exception {
         when(addressBookServiceMock.createAddressBook(any())).thenThrow(new IllegalStateException("address book already exists"));
-        MvcResult result = mockMvc.perform(post("/address-book/add")
+        MvcResult result = mockMvc.perform(post("/address-books/add")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\n" +
                         "    \"name\": \"unit test\",\n" +
@@ -119,7 +119,7 @@ public class addressBookControllerTest {
     @ParameterizedTest
     @ValueSource(strings = {"-1", "a", "1a", "a1"})
     void shouldValidateAddressBookIdOnGetEndpoint(String addressBookId) throws Exception {
-        MvcResult result = mockMvc.perform(get("/address-book/" + addressBookId))
+        MvcResult result = mockMvc.perform(get("/address-books/" + addressBookId))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andReturn();
@@ -131,7 +131,7 @@ public class addressBookControllerTest {
     @Test
     void shouldProvideFeedbackIfGetAddressBookByIdNotFound() throws Exception {
         when(addressBookServiceMock.getAddressBook(anyInt())).thenThrow(new ResourceNotFoundException("no address book found for id 1"));
-        MvcResult result = mockMvc.perform(get("/address-book/1"))
+        MvcResult result = mockMvc.perform(get("/address-books/1"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -143,7 +143,7 @@ public class addressBookControllerTest {
     @Test
     void shouldReturnAddressBookByIdAsJsonString() throws Exception {
         when(addressBookServiceMock.getAddressBook(anyInt())).thenReturn(dummyAddressBook());
-        MvcResult result = mockMvc.perform(get("/address-book/0"))
+        MvcResult result = mockMvc.perform(get("/address-books/0"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -155,7 +155,7 @@ public class addressBookControllerTest {
     @Test
     void shouldReturnOkIfAddressBookDeletedSuccessfully() throws Exception {
         doNothing().when(addressBookServiceMock).deleteAddressBook(anyInt());
-        MvcResult result = mockMvc.perform(delete("/address-book/0"))
+        MvcResult result = mockMvc.perform(delete("/address-books/0"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -167,7 +167,7 @@ public class addressBookControllerTest {
     @Test
     void shouldProvideFeedbackIfAddressBookForDeleteNotFound() throws Exception {
         doThrow(new ResourceNotFoundException("no address book found for id 1")).when(addressBookServiceMock).deleteAddressBook(anyInt());
-        MvcResult result = mockMvc.perform(delete("/address-book/1"))
+        MvcResult result = mockMvc.perform(delete("/address-books/1"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
                 .andReturn();
@@ -179,7 +179,7 @@ public class addressBookControllerTest {
     @ParameterizedTest
     @ValueSource(strings = {"-1", "a", "1a", "a1"})
     void shouldProvideFeedbackIfAddressBookIdIsNotValid(String addressBookId) throws Exception {
-        MvcResult result = mockMvc.perform(delete("/address-book/" + addressBookId))
+        MvcResult result = mockMvc.perform(delete("/address-books/" + addressBookId))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andReturn();

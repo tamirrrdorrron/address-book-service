@@ -17,7 +17,7 @@ public class AddressBookValidator {
     }
 
     public void checkIfExists(String name, String branchNumber) {
-        if (addressBooksRepository.findByNameAndBranchNumber(name, branchNumber).size() > 0) {
+        if (addressBooksRepository.existsAddressBookByNameAndBranchNumber(name, branchNumber)) {
             throw new IllegalStateException("address book already exists");
         };
     }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AddressBooksRepository extends CrudRepository<AddressBook, Integer> {
     List<AddressBook> findByNameAndBranchNumber(String name, String branchNumber);
+    boolean existsAddressBookByNameAndBranchNumber(String name, String branchNumber);
 }

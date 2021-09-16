@@ -2,6 +2,10 @@
 
 A REST API for managing address books and contacts
 
+## Swagger
+
+API documentation is available via swagger `/address-book-service/swagger-ui.html`
+
 ## How to run the application locally
 - spin up the test db by running docker-compose up
 - run the application in intellij with `development` profile

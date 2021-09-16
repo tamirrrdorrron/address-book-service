@@ -13,6 +13,13 @@ import javax.persistence.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "addressBook"})
 public class Contact {
 
+    public Contact() {}
+
+    public Contact(String fullName, String mobilePhone) {
+        this.fullName = fullName;
+        this.mobilePhone = mobilePhone;
+    }
+
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     int id;

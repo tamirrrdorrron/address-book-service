@@ -16,7 +16,7 @@ public class ContactValidator {
     }
 
     public void checkIfExists(String mobilePhone, int addressBookId) {
-        if (contactsRepository.findContactByMobilePhoneAndAddressBook_Id(mobilePhone, addressBookId).size() > 0) {
+        if (contactsRepository.existsContactByAddressBook_IdAndMobilePhone(addressBookId, mobilePhone)) {
             throw new IllegalStateException("contact with mobile phone '" + mobilePhone + "' already exists in address book '" + addressBookId + "'");
         };
     }

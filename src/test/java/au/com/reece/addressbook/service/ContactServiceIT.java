@@ -4,43 +4,52 @@ import au.com.reece.addressbook.exceptions.ContactMismatchError;
 import au.com.reece.addressbook.model.AddressBook;
 import au.com.reece.addressbook.model.Contact;
 import au.com.reece.addressbook.dto.ContactRequestBody;
+import au.com.reece.addressbook.repository.ContactsRepository;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 public class ContactServiceIT extends addressBookServiceAbstract {
 
+    private static final String addressBookName = "book1";
+    private static final String branchNumber = "2003";
+    private static final String fullName = "David Young";
+    private static final String mobilePhone = "0488661490";
+
     @Autowired
     ContactService contactService;
+    @MockBean
+    ContactsRepository contactsRepositoryMock;
+
+    private AddressBook createAddressBookWithContact(String addressBookName, String branchNumber, String fullName, String mobilePhone) {
+        AddressBook addressBook = createAddressBook(addressBookName, branchNumber);
+
+        ContactRequestBody contactRequestBody = new ContactRequestBody();
+        contactRequestBody.setFullName(fullName);
+        contactRequestBody.setMobilePhone(mobilePhone);
+
+        contactService.addContactToAddressBook(addressBook.getId(), contactRequestBody);
+
+        return addressBookService.getAddressBook(addressBook.getId());
+    }
 
     @Test
     void shouldAddContactToAddressBook() {
-        createAddressBook("a new book", "2003");
-        AddressBook addressBook = addressBookService.getAllAddressBooks().get(0);
-
-        ContactRequestBody contactRequestBody = new ContactRequestBody();
-        contactRequestBody.setFullName("Tamir Doron");
-        contactRequestBody.setMobilePhone("0488661490");
-
-        contactService.addContactToAddressBook(addressBook.getId(), contactRequestBody);
-        addressBook = addressBookService.getAllAddressBooks().get(0);
-        Contact contact = addressBook.getContacts().iterator().next();
-
-        assertEquals(contact.getAddressBook(), addressBook);
-        assertEquals(contact.getFullName(), "Tamir Doron");
-        assertEquals(contact.getMobilePhone(), "0488661490");
-
+        createAddressBookWithContact(addressBookName, branchNumber, fullName, mobilePhone);
     }
 
     @Test
     void shouldThrowExceptionOnInvalidMobileNumber() {
-        createAddressBook("a new book", "2003");
-        AddressBook addressBook = addressBookService.getAllAddressBooks().get(0);
+        AddressBook addressBook = createAddressBook("a new book", "2003");
 
         ContactRequestBody contactRequestBody = new ContactRequestBody();
         contactRequestBody.setFullName("Tamir Doron");
@@ -53,14 +62,12 @@ public class ContactServiceIT extends addressBookServiceAbstract {
 
     @Test
     void shouldNotAllowMultipleSameMobilePhoneOneAddressBook() {
-        createAddressBook("a new book", "2003");
-        AddressBook addressBook = addressBookService.getAllAddressBooks().get(0);
+        AddressBook addressBook = createAddressBookWithContact(addressBookName, branchNumber, fullName, mobilePhone);
 
         ContactRequestBody contactRequestBody = new ContactRequestBody();
-        contactRequestBody.setFullName("Tamir Doron");
-        contactRequestBody.setMobilePhone("0488661490");
+        contactRequestBody.setFullName(fullName);
+        contactRequestBody.setMobilePhone(mobilePhone);
 
-        contactService.addContactToAddressBook(addressBook.getId(), contactRequestBody);
         assertThrows(IllegalStateException.class, () -> {
             contactService.addContactToAddressBook(addressBook.getId(), contactRequestBody);
         });
@@ -68,70 +75,33 @@ public class ContactServiceIT extends addressBookServiceAbstract {
 
     @Test
     void shouldComplainIfTryingToDeleteValidContactButNotFromAddressBook() {
-        AddressBook addressBook1 = createAddressBook("a new book", "2003");
-        addressBookService.getAddressBook(addressBook1.getId());
-
-        ContactRequestBody contactRequestBody = new ContactRequestBody();
-        contactRequestBody.setFullName("Tamir Doron");
-        contactRequestBody.setMobilePhone("0488661490");
-
-        contactService.addContactToAddressBook(addressBook1.getId(), contactRequestBody);
-
-        AddressBook addressBook2 = createAddressBook("a second new book", "2003");
-        addressBookService.getAddressBook(addressBook2.getId());
-
-        contactRequestBody = new ContactRequestBody();
-        contactRequestBody.setFullName("John Smith");
-        contactRequestBody.setMobilePhone("0488661490");
-
-        Contact contact2 = contactService.addContactToAddressBook(addressBook2.getId(), contactRequestBody);
+        AddressBook addressBook1 = createAddressBookWithContact("book1", branchNumber, fullName, mobilePhone);
+        AddressBook addressBook2 = createAddressBookWithContact("book2", branchNumber, fullName, mobilePhone);
 
         assertThrows(ContactMismatchError.class, () -> {
-            contactService.deleteContact(addressBook1.getId(), contact2.getId());
+            contactService.deleteContact(addressBook1.getId(), addressBook2.getContacts().iterator().next().getId());
         });
     }
 
     @Test
     void shouldGetContact() {
-        AddressBook addressBook1 = createAddressBook("a new book", "2003");
-        addressBookService.getAddressBook(addressBook1.getId());
+        AddressBook addressBook = createAddressBookWithContact(addressBookName, branchNumber, fullName, mobilePhone);
+        Contact contact = addressBook.getContacts().iterator().next();
 
-        ContactRequestBody contactRequestBody = new ContactRequestBody();
-        contactRequestBody.setFullName("Tamir Doron");
-        contactRequestBody.setMobilePhone("0488661490");
-
-        Contact contact = contactService.addContactToAddressBook(addressBook1.getId(), contactRequestBody);
-
-        assertTrue(contactIsTheSame(contact, contactService.getContact(contact.getId())));
+        assertEquals(contact.getFullName(), fullName);
+        assertEquals(contact.getMobilePhone(), mobilePhone);
     }
 
     @Test
-    @Transactional
+    @Transactional // this is not right to put it on the test, it should be on the service or something
     void shouldDeleteContact() throws ContactMismatchError {
-        AddressBook addressBook1 = createAddressBook("a new book", "2003");
-        addressBookService.getAddressBook(addressBook1.getId());
-
-        ContactRequestBody contactRequestBody = new ContactRequestBody();
-        contactRequestBody.setFullName("Tamir Doron");
-        contactRequestBody.setMobilePhone("0488661490");
-
-        Contact contact = contactService.addContactToAddressBook(addressBook1.getId(), contactRequestBody);
-        assertTrue(contactIsTheSame(contact, contactService.getContact(contact.getId())));
-
-        contactService.deleteContact(addressBook1.getId(), contact.getId());
-
-        assertThrows(ResourceNotFoundException.class, () -> {
-            contactService.getContact(contact.getId());
-        });
+        AddressBook addressBook = createAddressBookWithContact(addressBookName, branchNumber, fullName, mobilePhone);
+        Contact contact = addressBookService.getAddressBook(addressBook.getId()).getContacts().iterator().next();
+        contactService.deleteContact(addressBook.getId(), contact.getId());
+        verify(contactsRepository, times(1)).delete(contact);
     }
 
     @Test
     void shouldConvertRequestBodyToContact() {}
-
-    boolean contactIsTheSame(Contact source, Contact target) {
-        return source.getAddressBook().getId() == target.getAddressBook().getId()
-                && source.getFullName().equals(target.getFullName())
-                && source.getMobilePhone().equals(target.getMobilePhone());
-    }
 
 }

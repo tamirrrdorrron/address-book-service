@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @Validated
-@RequestMapping("/address-book")
+@RequestMapping("/address-books")
 public class AddressBookController {
 
     @Autowired

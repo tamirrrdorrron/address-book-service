@@ -12,10 +12,7 @@ public class Utils {
     }
 
     public static Contact makeContactFromRequestBody(ContactRequestBody contactRequestBody) {
-        Contact contact = new Contact();
-        contact.setFullName(contactRequestBody.getFullName());
-        contact.setMobilePhone(contactRequestBody.getMobilePhone());
-        return contact;
+        return new Contact(contactRequestBody.getFullName(), contactRequestBody.getMobilePhone());
     }
 
     public static AddressBook makeAddressBookFromRequestBody(AddressBookRequestBody addressBookRequestBody) {

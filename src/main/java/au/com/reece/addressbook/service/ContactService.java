@@ -1,6 +1,7 @@
 package au.com.reece.addressbook.service;
 
 import au.com.reece.addressbook.dto.ContactRequestBody;
+import au.com.reece.addressbook.dto.ContactResponseBody;
 import au.com.reece.addressbook.exceptions.ContactMismatchError;
 import au.com.reece.addressbook.model.AddressBook;
 import au.com.reece.addressbook.model.Contact;
@@ -12,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -44,6 +48,10 @@ public class ContactService {
         if (contact.isPresent()) {
             return contact.get();
         } else throw new ResourceNotFoundException("no contact found for id '" + contactId + "'");
+    }
+
+    public List<ContactResponseBody> getAllDistinctContacts() {
+        return contactsRepository.findDistinctContact();
     }
 
     public void deleteContact(int addressBookId, int contactId) throws ContactMismatchError {
