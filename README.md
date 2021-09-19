@@ -3,13 +3,7 @@
 A REST API for managing address books and contacts
 
 ## How to run the application locally
-1. spin up the test db using docker-compose
-
-```bash
-docker-compose up
-```
-
-2. run the application in intellij with `development` profile, this will expose 2 demo data endpoints for you:
+run the application in intellij with `development` profile, this will expose 2 demo data endpoints for you:
 
 this will load some test data for you
 ```http request
@@ -21,14 +15,18 @@ this will clean up the database
 http://localhost:8090/address-book-service/cleanup
 ```
 
+You can then view the demo data
+```http request
+http://localhost:8090/address-book-service/address-books/
+```
+
 ## Swagger
 
 API documentation is available via swagger `/address-book-service/swagger-ui.html`
 
 
 ## Running tests
-- spin up the test db by running docker-compose up
-- run build / test using intellij
+- run build / test using intellij / gradle plugin
 
 
 ## Deploying the application in a production environment
