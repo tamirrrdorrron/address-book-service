@@ -1,11 +1,11 @@
-CREATE TABLE address_book (
+CREATE TABLE IF NOT EXISTS address_book (
   id INT NOT NULL AUTO_INCREMENT,
   name VARCHAR(200) NOT NULL,
   branch_number VARCHAR(10) NOT NULL,
   PRIMARY KEY(id)
 );
 
-CREATE TABLE contact (
+CREATE TABLE IF NOT EXISTS contact (
   id INT NOT NULL AUTO_INCREMENT,
   full_name VARCHAR(100) NOT NULL,
   mobile_phone VARCHAR(30) NOT NULL,

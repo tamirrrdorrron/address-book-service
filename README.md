@@ -1,4 +1,4 @@
-# Address Book API
+# Address Book Service
 
 A REST API for managing address books and contacts
 
@@ -42,7 +42,7 @@ the application relies on a centralized mysql server (ie it is not included as p
 3. run the dockerized application as per normal:
 
 ```bash
-docker run address-book-api
+docker run -p 8090:8090 address-book-service 
 ``` 
 
 ## Kill processes running on port

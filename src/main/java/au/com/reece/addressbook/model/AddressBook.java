@@ -33,7 +33,7 @@ public class AddressBook {
     String branchNumber;
 
     @OneToMany(mappedBy="addressBook", fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
+            cascade = CascadeType.REMOVE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Contact> contacts;
 }

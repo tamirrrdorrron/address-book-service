@@ -1,21 +1,15 @@
 package au.com.reece.addressbook.service;
 
+import au.com.reece.addressbook.dto.ContactRequestBody;
 import au.com.reece.addressbook.exceptions.ContactMismatchError;
 import au.com.reece.addressbook.model.AddressBook;
 import au.com.reece.addressbook.model.Contact;
-import au.com.reece.addressbook.dto.ContactRequestBody;
-import au.com.reece.addressbook.repository.ContactsRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
-import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 public class ContactServiceIT extends addressBookServiceAbstract {
@@ -27,10 +21,8 @@ public class ContactServiceIT extends addressBookServiceAbstract {
 
     @Autowired
     ContactService contactService;
-    @MockBean
-    ContactsRepository contactsRepositoryMock;
 
-    private AddressBook createAddressBookWithContact(String addressBookName, String branchNumber, String fullName, String mobilePhone) {
+    protected AddressBook createAddressBookWithContact(String addressBookName, String branchNumber, String fullName, String mobilePhone) {
         AddressBook addressBook = createAddressBook(addressBookName, branchNumber);
 
         ContactRequestBody contactRequestBody = new ContactRequestBody();
@@ -93,12 +85,11 @@ public class ContactServiceIT extends addressBookServiceAbstract {
     }
 
     @Test
-    @Transactional // this is not right to put it on the test, it should be on the service or something
     void shouldDeleteContact() throws ContactMismatchError {
         AddressBook addressBook = createAddressBookWithContact(addressBookName, branchNumber, fullName, mobilePhone);
         Contact contact = addressBookService.getAddressBook(addressBook.getId()).getContacts().iterator().next();
         contactService.deleteContact(addressBook.getId(), contact.getId());
-        verify(contactsRepository, times(1)).delete(contact);
+        assertEquals(0, addressBookService.getAddressBook(addressBook.getId()).getContacts().size());
     }
 
     @Test
