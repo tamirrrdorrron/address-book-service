@@ -13,16 +13,3 @@ services:
       - ./scripts/db:/docker-entrypoint-initdb.d
     ports:
       - "3306:3306"
-
-  address-book-service:
-    image: address-book-api
-    depends_on:
-      - mysql-development
-    ports:
-      - 80:8090
-    environment:
-      - DATABASE_HOST=localhost
-      - DATABASE_USER=sa
-      - DATABASE_PASSWORD=sa
-      - DATABASE_NAME=CRM
-      - DATABASE_PORT=3306

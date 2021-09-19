@@ -45,6 +45,7 @@ public class AddressBookController {
     ResponseEntity<String> deleteAddressBook(
             @Pattern(regexp = "^[0-9]\\d*$", message = "address book id must be a integer >= 0")
             @PathVariable("id") String id) {
+        // should we check if there are contacts and fail if there are?
         addressBookService.deleteAddressBook(Integer.parseInt(id));
         return ResponseEntity.ok("{\n\"message\": \"address book with id '" + id + "' deleted successfully\"\n}");
     }

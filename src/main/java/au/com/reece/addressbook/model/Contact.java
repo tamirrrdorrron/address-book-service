@@ -1,6 +1,7 @@
 package au.com.reece.addressbook.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +19,13 @@ public class Contact {
     public Contact(String fullName, String mobilePhone) {
         this.fullName = fullName;
         this.mobilePhone = mobilePhone;
+    }
+
+    @Builder
+    public Contact(String fullName, String mobilePhone, AddressBook addressBook) {
+        this.fullName = fullName;
+        this.mobilePhone = mobilePhone;
+        this.addressBook = addressBook;
     }
 
     @Id
