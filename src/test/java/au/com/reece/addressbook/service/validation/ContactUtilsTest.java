@@ -2,7 +2,7 @@ package au.com.reece.addressbook.service.validation;
 
 import org.junit.jupiter.api.Test;
 
-public class ContactValidatorTest {
+public class ContactUtilsTest {
 
     @Test
     void shouldValidateContactRequestBody() {}

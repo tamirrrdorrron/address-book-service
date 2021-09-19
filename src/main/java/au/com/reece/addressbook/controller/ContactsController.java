@@ -3,7 +3,6 @@ package au.com.reece.addressbook.controller;
 import au.com.reece.addressbook.dto.ContactRequestBody;
 import au.com.reece.addressbook.dto.ContactResponseBody;
 import au.com.reece.addressbook.exceptions.ContactMismatchError;
-import au.com.reece.addressbook.model.AddressBook;
 import au.com.reece.addressbook.model.Contact;
 import au.com.reece.addressbook.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Pattern;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @Validated

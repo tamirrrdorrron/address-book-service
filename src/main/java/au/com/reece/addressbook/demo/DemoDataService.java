@@ -33,7 +33,6 @@ public class DemoDataService {
     }
 
     public String cleanup() {
-        contactsRepository.deleteAll();
         addressBooksRepository.deleteAll();
         return "cleaned up test data";
     }

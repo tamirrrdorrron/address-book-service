@@ -7,19 +7,19 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class AddressBookValidator {
+public class AddressBookUtils {
 
     @Autowired
     AddressBooksRepository addressBooksRepository;
 
     public void validateRequestBody(AddressBookRequestBody addressBookRequestBody) {
-        BranchValidator.validateBranchNumber(addressBookRequestBody.getBranchNumber());
+        BranchUtils.validateBranchNumber(addressBookRequestBody.getBranchNumber());
     }
 
     public void checkIfExists(String name, String branchNumber) {
         if (addressBooksRepository.existsAddressBookByNameAndBranchNumber(name, branchNumber)) {
             throw new IllegalStateException("address book already exists");
-        };
+        }
     }
 
 }

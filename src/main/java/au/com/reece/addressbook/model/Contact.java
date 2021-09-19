@@ -14,6 +14,21 @@ import javax.persistence.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "addressBook"})
 public class Contact {
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @SuppressWarnings("PMD.ShortVariable")
+    int id;
+
+    @Column
+    String fullName;
+
+    @Column
+    String mobilePhone;
+
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="address_book_id", nullable=false)
+    AddressBook addressBook;
+
     public Contact() {}
 
     public Contact(String fullName, String mobilePhone) {
@@ -28,17 +43,4 @@ public class Contact {
         this.addressBook = addressBook;
     }
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    int id;
-
-    @Column
-    String fullName;
-
-    @Column
-    String mobilePhone;
-
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="address_book_id", nullable=false)
-    AddressBook addressBook;
 }

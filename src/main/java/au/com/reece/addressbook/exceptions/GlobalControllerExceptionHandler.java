@@ -42,12 +42,12 @@ public class GlobalControllerExceptionHandler {
         return new ErrorPayload(HttpStatus.BAD_REQUEST.value(), ErrorType.INVALID_REQUEST_TYPE, constructedError);
     }
 
-    @ExceptionHandler(value = {ConstraintViolationException.class})
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({ConstraintViolationException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    public ErrorPayload badPathVariable(ConstraintViolationException e) {
-        String invalidValue = e.getConstraintViolations().iterator().next().getInvalidValue().toString();
-        String errorMessage = e.getConstraintViolations().iterator().next().getMessage();
+    public ErrorPayload badPathVariable(ConstraintViolationException exception) {
+        String invalidValue = exception.getConstraintViolations().iterator().next().getInvalidValue().toString();
+        String errorMessage = exception.getConstraintViolations().iterator().next().getMessage();
         String constructedError = "value '" + invalidValue + "' is invalid. " + errorMessage;
         return new ErrorPayload(HttpStatus.BAD_REQUEST.value(), ErrorType.INVALID_REQUEST_TYPE, constructedError);
     }

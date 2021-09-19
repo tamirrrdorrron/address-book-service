@@ -6,17 +6,15 @@ import au.com.reece.addressbook.exceptions.ContactMismatchError;
 import au.com.reece.addressbook.model.AddressBook;
 import au.com.reece.addressbook.model.Contact;
 import au.com.reece.addressbook.repository.ContactsRepository;
-import au.com.reece.addressbook.service.validation.ContactValidator;
+import au.com.reece.addressbook.service.validation.ContactUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 @Service
@@ -28,18 +26,18 @@ public class ContactService {
 
     private final AddressBookService addressBookService;
     private final ContactsRepository contactsRepository;
-    private final ContactValidator contactValidator;
+    private final ContactUtils contactUtils;
 
     @Autowired
-    public ContactService(AddressBookService addressBookService, ContactsRepository contactsRepository, ContactValidator contactValidator) {
+    public ContactService(AddressBookService addressBookService, ContactsRepository contactsRepository, ContactUtils contactUtils) {
         this.addressBookService = addressBookService;
         this.contactsRepository = contactsRepository;
-        this.contactValidator = contactValidator;
+        this.contactUtils = contactUtils;
     }
 
     public Contact addContactToAddressBook(int addressBookId, ContactRequestBody contactRequestBody) {
-        contactValidator.validateRequestBody(contactRequestBody);
-        contactValidator.checkIfExists(contactRequestBody.getMobilePhone(), addressBookId);
+        contactUtils.validateRequestBody(contactRequestBody);
+        contactUtils.checkIfExists(contactRequestBody.getMobilePhone(), addressBookId);
         return contactsRepository.save(convertRequestBodyToContact(addressBookId, contactRequestBody));
     }
 
@@ -47,7 +45,9 @@ public class ContactService {
         Optional<Contact> contact = contactsRepository.findById(contactId);
         if (contact.isPresent()) {
             return contact.get();
-        } else throw new ResourceNotFoundException("no contact found for id '" + contactId + "'");
+        } else {
+            throw new ResourceNotFoundException("no contact found for id '" + contactId + "'");
+        }
     }
 
     public List<ContactResponseBody> getAllDistinctContacts() {
@@ -65,9 +65,18 @@ public class ContactService {
 
     private Contact convertRequestBodyToContact(int addressBookId, ContactRequestBody contactRequestBody) {
         AddressBook addressBook = addressBookService.getAddressBook(addressBookId);
-        Contact contact = Utils.makeContactFromRequestBody(contactRequestBody);
-        Utils.attachAddressBookToContact(addressBook, contact);
+        Contact contact = makeContactFromRequestBody(contactRequestBody);
+        attachAddressBookToContact(addressBook, contact);
         return contact;
     }
+
+    private static void attachAddressBookToContact(AddressBook addressBook, Contact contact) {
+        contact.setAddressBook(addressBook);
+    }
+
+    private static Contact makeContactFromRequestBody(ContactRequestBody contactRequestBody) {
+        return new Contact(contactRequestBody.getFullName(), contactRequestBody.getMobilePhone());
+    }
+
 
 }

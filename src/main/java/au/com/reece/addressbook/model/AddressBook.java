@@ -12,18 +12,10 @@ import java.util.Set;
 @Data
 public class AddressBook {
 
-    @Builder
-    public AddressBook(String name, String branchNumber) {
-        this.name = name;
-        this.branchNumber = branchNumber;
-    }
-
-    public AddressBook() {
-    }
-
     @Column
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @SuppressWarnings("PMD.ShortVariable")
     int id;
 
     @Column
@@ -36,4 +28,14 @@ public class AddressBook {
             cascade = CascadeType.REMOVE)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<Contact> contacts;
+
+    @Builder
+    public AddressBook(String name, String branchNumber) {
+        this.name = name;
+        this.branchNumber = branchNumber;
+    }
+
+    public AddressBook() {
+    }
+
 }

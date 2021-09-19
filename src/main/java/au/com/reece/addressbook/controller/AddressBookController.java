@@ -32,21 +32,21 @@ public class AddressBookController {
         return addressBookService.createAddressBook(addressBookRequestBody);
     }
 
-    @GetMapping(path="/{id}")
+    @GetMapping(path="/{addressBookId}")
     public @ResponseBody
     AddressBook getAddressBook(
             @Pattern(regexp = "^[0-9]\\d*$", message = "address book id must be a integer >= 0")
-            @PathVariable("id") String id) {
-        return addressBookService.getAddressBook(Integer.parseInt(id));
+            @PathVariable("addressBookId") String addressBookId) {
+        return addressBookService.getAddressBook(Integer.parseInt(addressBookId));
     }
 
-    @DeleteMapping(path="/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(path="/{addressBookId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody
     ResponseEntity<String> deleteAddressBook(
             @Pattern(regexp = "^[0-9]\\d*$", message = "address book id must be a integer >= 0")
-            @PathVariable("id") String id) {
+            @PathVariable("addressBookId") String addressBookId) {
         // should we check if there are contacts and fail if there are?
-        addressBookService.deleteAddressBook(Integer.parseInt(id));
-        return ResponseEntity.ok("{\n\"message\": \"address book with id '" + id + "' deleted successfully\"\n}");
+        addressBookService.deleteAddressBook(Integer.parseInt(addressBookId));
+        return ResponseEntity.ok("{\n\"message\": \"address book with id '" + addressBookId + "' deleted successfully\"\n}");
     }
 }

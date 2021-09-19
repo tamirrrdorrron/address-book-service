@@ -3,6 +3,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id 'jacoco'
+	id 'pmd'
 }
 
 group = 'au.com.reece'
@@ -11,6 +12,16 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+}
+
+pmd {
+	ruleSets = []
+	ruleSetFiles = files("config/pmd/ruleSet.xml")
+}
+pmdMain {
+	excludes = [
+			"au/com/reece/addressbook/configuration/**"
+	]
 }
 
 jar {
@@ -40,6 +51,11 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	testLogging {
+		outputs.upToDateWhen {false}
+		showStandardStreams = true
+	}
+
 }
 
 jacoco {
@@ -81,3 +97,6 @@ jacocoTestReport {
 		}
 	}
 }
+
+test.finalizedBy jacocoTestReport
+check.dependsOn jacocoTestCoverageVerification
